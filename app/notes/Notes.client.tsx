@@ -11,17 +11,7 @@ import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
 import css from "./page.module.css";
 
-interface NotesClientProps {
-  initialData: FetchNotesResponse;
-  initialPage: number;
-  initialQuery: string;
-}
-
-export default function NotesClient({
-  initialData,
-  initialPage,
-  initialQuery,
-}: NotesClientProps) {
+export default function NotesClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -44,10 +34,6 @@ export default function NotesClient({
     queryKey: ["notes", currentPage, searchQuery],
     queryFn: () => fetchNotes(currentPage, searchQuery),
     placeholderData: keepPreviousData,
-    initialData:
-      currentPage === initialPage && searchQuery === initialQuery
-        ? initialData
-        : undefined,
   });
 
   const totalPages = data?.totalPages ?? 0;
@@ -73,6 +59,7 @@ export default function NotesClient({
       ) : (
         <NoteList notes={data?.notes ?? []} />
       )}
+
       {isModalOpen && (
         <Modal onClose={closeModal}>
           <NoteForm onCloseModal={closeModal} />
